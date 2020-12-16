@@ -2,11 +2,14 @@ package com.kqy.tank;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class TankFrame extends Frame {
     private static final int GAME_WIDTH = 800,GAME_HEIGHT =600;
     Tank tank = new Tank(200,200,Dir.DOWN,this);
-    Bullet b = new Bullet(200,200,Dir.DOWN);
+    LinkedList<Bullet> bulletList = new LinkedList<>();
+//    Bullet b = new Bullet(200,200,Dir.DOWN);
     public TankFrame() throws HeadlessException {
         setVisible(true);
         setResizable(false);
@@ -42,8 +45,14 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("子弹的数量"+bulletList.size(),10,60);
+        g.setColor(c);
         tank.paint(g);
-        b.paint(g);
+        for (int i = 0; i < bulletList.size(); i ++){
+            bulletList.get(i).paint(g);
+        }
     }
 
 
