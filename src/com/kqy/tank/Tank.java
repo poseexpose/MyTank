@@ -7,7 +7,7 @@ public class Tank {
     private Dir dir;
     private static final int speed = 5;
     private boolean moving = false;
-    private static int WIDTH = 30, HEIGHT = 30;
+    private static int WIDTH = ResourceMgr.tankD.getWidth(), HEIGHT =ResourceMgr.tankD.getHeight();
     private TankFrame tf = null;
 
     public Tank(int x, int y, Dir dir, TankFrame tf) {
@@ -18,15 +18,33 @@ public class Tank {
     }
 
     public void paint(Graphics graphics){
-        Color c = graphics.getColor();
+        /*Color c = graphics.getColor();
         graphics.setColor(Color.YELLOW);
         graphics.fillRect(x,y,WIDTH,HEIGHT);
-        graphics.setColor(c);
+        graphics.setColor(c);*/
+
+        switch (dir){
+            case UP:
+                graphics.drawImage(ResourceMgr.tankU,x,y,null);
+                break;
+            case LEFT:
+                graphics.drawImage(ResourceMgr.tankL,x,y,null);
+                break;
+            case DOWN:
+                graphics.drawImage(ResourceMgr.tankD,x,y,null);
+                break;
+            case RIGHT:
+                graphics.drawImage(ResourceMgr.tankR,x,y,null);
+                break;
+            default:break;
+        }
         move();
     }
 
     public void fire(){
-        tf.bulletList.add(new Bullet(this.x,this.y,this.dir,this.tf));
+        int bX = x + WIDTH/2 - ResourceMgr.bulletD.getWidth()/2;
+        int bY= y + HEIGHT/2 - ResourceMgr.bulletD.getHeight()/2;
+        tf.bulletList.add(new Bullet(bX,bY,this.dir,this.tf));
     }
 
     public void move() {
