@@ -8,7 +8,7 @@ public class Bullet {
     private static final int speed = 10;
     private static int WIDTH = ResourceMgr.bulletD.getWidth(), HEIGHT = ResourceMgr.bulletD.getHeight();
     private TankFrame tf = null;
-    private boolean live = true;
+    private boolean living = true;
 
     public Bullet(int x, int y, Dir dir,TankFrame tf) {
         this.x = x;
@@ -18,7 +18,7 @@ public class Bullet {
     }
 
     public void paint(Graphics graphics){
-        if(!live)tf.bulletList.remove(this);
+        if(!living)tf.bulletList.remove(this);
         /*Color c = graphics.getColor();
         graphics.setColor(Color.RED);
         graphics.fillOval(x,y,WIDTH,HEIGHT);
@@ -57,10 +57,21 @@ public class Bullet {
                 break;
             default:break;
         }
-        if(x < 0 || y < 0 || x > tf.getWidth() || y > tf.getHeight()) live = false;
+        if(x < 0 || y < 0 || x > tf.getWidth() || y > tf.getHeight()) living = false;
     }
 
+    public void collideWith(Tank tank){
+        Rectangle rect1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
+        Rectangle rect2 = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
+        if (rect1.intersects(rect2)){
+            tank.die();
+            this.die();
+        }
+    }
 
+    private void die(){
+        this.living = false;
+    }
 
 
 }

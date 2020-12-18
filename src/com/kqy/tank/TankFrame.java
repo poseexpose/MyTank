@@ -7,8 +7,9 @@ import java.util.LinkedList;
 
 public class TankFrame extends Frame {
     private static final int GAME_WIDTH = 800,GAME_HEIGHT =600;
-    Tank tank = new Tank(200,200,Dir.DOWN,this);
+    Tank tank = new Tank(200,400,Dir.DOWN,this);
     LinkedList<Bullet> bulletList = new LinkedList<>();
+    LinkedList<Tank> tankList = new LinkedList<>();
 //    Bullet b = new Bullet(200,200,Dir.DOWN);
     public TankFrame() throws HeadlessException {
         setVisible(true);
@@ -48,11 +49,24 @@ public class TankFrame extends Frame {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量"+bulletList.size(),10,60);
+        g.drawString("敌人的数量"+tankList.size(),10,100);
         g.setColor(c);
         tank.paint(g);
         for (int i = 0; i < bulletList.size(); i ++){
             bulletList.get(i).paint(g);
         }
+
+        for (int i = 0; i < tankList.size(); i++) {
+            tankList.get(i).paint(g);
+        }
+
+        for (int i = 0; i < bulletList.size(); i ++){
+            bulletList.get(i).paint(g);
+            for (int j = 0; j < tankList.size(); j++) {
+                bulletList.get(i).collideWith(tankList.get(j));
+            }
+        }
+
     }
 
 

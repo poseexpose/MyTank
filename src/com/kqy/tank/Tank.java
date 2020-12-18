@@ -6,9 +6,19 @@ public class Tank {
     private int x,y;
     private Dir dir;
     private static final int speed = 5;
-    private boolean moving = false;
-    private static int WIDTH = ResourceMgr.tankD.getWidth(), HEIGHT =ResourceMgr.tankD.getHeight();
+    private boolean moving = true;
+    public static int WIDTH = ResourceMgr.tankD.getWidth(), HEIGHT =ResourceMgr.tankD.getHeight();
     private TankFrame tf = null;
+
+    public boolean isLiving() {
+        return living;
+    }
+
+    public void setLiving(boolean living) {
+        this.living = living;
+    }
+
+    private boolean living = true;
 
     public Tank(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
@@ -22,6 +32,9 @@ public class Tank {
         graphics.setColor(Color.YELLOW);
         graphics.fillRect(x,y,WIDTH,HEIGHT);
         graphics.setColor(c);*/
+        if (!living){
+            tf.tankList.remove(this);
+        }
 
         switch (dir){
             case UP:
@@ -101,5 +114,9 @@ public class Tank {
 
     public void setDir(Dir dir) {
         this.dir = dir;
+    }
+
+    public void die() {
+        this.living = false;
     }
 }
