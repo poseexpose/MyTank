@@ -7,9 +7,10 @@ import java.util.LinkedList;
 
 public class TankFrame extends Frame {
     private static final int GAME_WIDTH = 800,GAME_HEIGHT =600;
-    Tank tank = new Tank(200,400,Dir.DOWN,this);
+    Tank tank = new Tank(200,400,Dir.DOWN,Group.GOOD,this);
     LinkedList<Bullet> bulletList = new LinkedList<>();
     LinkedList<Tank> tankList = new LinkedList<>();
+    Explode explode = new Explode(100,100,this);
 //    Bullet b = new Bullet(200,200,Dir.DOWN);
     public TankFrame() throws HeadlessException {
         setVisible(true);
@@ -66,6 +67,8 @@ public class TankFrame extends Frame {
                 bulletList.get(i).collideWith(tankList.get(j));
             }
         }
+
+        explode.paint(g);
 
     }
 

@@ -1,6 +1,7 @@
 package com.kqy.tank;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Tank {
     private int x,y;
@@ -9,6 +10,19 @@ public class Tank {
     private boolean moving = true;
     public static int WIDTH = ResourceMgr.tankD.getWidth(), HEIGHT =ResourceMgr.tankD.getHeight();
     private TankFrame tf = null;
+    private Random random = new Random();
+    private Group group = Group.BAD;
+    private boolean living = true;
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+
 
     public boolean isLiving() {
         return living;
@@ -18,13 +32,14 @@ public class Tank {
         this.living = living;
     }
 
-    private boolean living = true;
 
-    public Tank(int x, int y, Dir dir, TankFrame tf) {
+
+    public Tank(int x, int y, Dir dir, Group group,TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf = tf;
+        this.group = group;
     }
 
     public void paint(Graphics graphics){
@@ -57,7 +72,7 @@ public class Tank {
     public void fire(){
         int bX = x + WIDTH/2 - ResourceMgr.bulletD.getWidth()/2;
         int bY= y + HEIGHT/2 - ResourceMgr.bulletD.getHeight()/2;
-        tf.bulletList.add(new Bullet(bX,bY,this.dir,this.tf));
+        tf.bulletList.add(new Bullet(bX,bY,this.dir,this.group,this.tf));
     }
 
     public void move() {

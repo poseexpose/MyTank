@@ -9,8 +9,10 @@ public class Main {
         TankFrame tf = new TankFrame();
 
         for(int i=0; i<5; i++) {
-            tf.tankList.add(new Tank(50 + i*80, 100, Dir.DOWN, tf));
+            tf.tankList.add(new Tank(50 + i*80, 100, Dir.DOWN,Group.BAD, tf));
         }
+
+        new Thread(()->new Audio("audio/explode.wav").loop()).start();
 
         while (true){
             Thread.sleep(50);
