@@ -1,17 +1,20 @@
 package com.kqy.tank;
 
+import sun.security.acl.GroupImpl;
+
 import java.awt.*;
 import java.util.Random;
 
 public class Tank {
     private int x,y;
     private Dir dir;
-    private static final int speed = 5;
+    private static final int speed = 10;
     private boolean moving = true;
-    public static int WIDTH = ResourceMgr.tankD.getWidth(), HEIGHT =ResourceMgr.tankD.getHeight();
+    private Group group = Group.BAD;
+    public static int WIDTH = ResourceMgr.goodTankD.getWidth(), HEIGHT =ResourceMgr.goodTankD.getHeight();
     private TankFrame tf = null;
     private Random random = new Random();
-    private Group group = Group.BAD;
+    public Rectangle rect = new Rectangle();
     private boolean living = true;
 
     public Group getGroup() {
@@ -40,6 +43,10 @@ public class Tank {
         this.dir = dir;
         this.tf = tf;
         this.group = group;
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public void paint(Graphics graphics){
@@ -53,16 +60,16 @@ public class Tank {
 
         switch (dir){
             case UP:
-                graphics.drawImage(ResourceMgr.tankU,x,y,null);
+                graphics.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU , x , y ,null);
                 break;
             case LEFT:
-                graphics.drawImage(ResourceMgr.tankL,x,y,null);
+                graphics.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL , x , y ,null);
                 break;
             case DOWN:
-                graphics.drawImage(ResourceMgr.tankD,x,y,null);
+                graphics.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD , x , y ,null);
                 break;
             case RIGHT:
-                graphics.drawImage(ResourceMgr.tankR,x,y,null);
+                graphics.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR , x , y ,null);
                 break;
             default:break;
         }
@@ -73,6 +80,9 @@ public class Tank {
         int bX = x + WIDTH/2 - ResourceMgr.bulletD.getWidth()/2;
         int bY= y + HEIGHT/2 - ResourceMgr.bulletD.getHeight()/2;
         tf.bulletList.add(new Bullet(bX,bY,this.dir,this.group,this.tf));
+        for (int i = 0; i < tf.bulletList.size(); i++) {
+            tf.bulletList.get(i).collideWith(this);
+        }
     }
 
     public void move() {
@@ -92,6 +102,27 @@ public class Tank {
                 break;
             default:break;
         }
+
+        if (this.group == Group.BAD && random.nextInt(100) > 95)this.fire();
+        if (this.group == Group.BAD && random.nextInt(100) > 95)this.randomDir();
+
+        boundsCheck();
+
+        //update rect
+        rect.x = this.x;
+        rect.y = this.y;
+    }
+
+
+    private void boundsCheck() {
+        if(this.x < 2) x = 2;
+        if (this.y < 28) y = 28;
+        if (this.x > TankFrame.GAME_WIDTH - Tank.WIDTH - 2) x = TankFrame.GAME_WIDTH - Tank.WIDTH -2;
+        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT - 2 ) y = TankFrame.GAME_HEIGHT -Tank.HEIGHT -2;
+    }
+
+    private void randomDir() {
+        this.dir = Dir.values()[random.nextInt(4)];
     }
 
 
